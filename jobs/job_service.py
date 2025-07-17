@@ -31,6 +31,7 @@ def get_all_jobs():
 
 
 
+
 def updatejob_byid(job_id , clientid, **kwargs):
     
     client = User.objects.get(id=clientid)
