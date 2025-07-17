@@ -49,6 +49,7 @@ class GigsViewSet(ModelViewSet):
 
         user = request.user
 
+
         try:
 
             gig, error = gig_service.get_gig_byid(user.id, pk)
