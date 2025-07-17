@@ -20,3 +20,4 @@ class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ["user" ,"full_name"  , "bio" , "hourly_rate"]
+        
