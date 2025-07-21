@@ -34,6 +34,8 @@ class ProposalCreateView(APIView):
                 cover_letter=cover_letter,
                 proposed_rate=proposed_rate
             )
+            
+            
 
             if error == "INVALID JOB ID":
                 return Response({"message" : error} , status=status.HTTP_400_BAD_REQUEST)
@@ -46,8 +48,13 @@ class ProposalCreateView(APIView):
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        {
-            "cover_letter": "I am highly interested in this position and believe my experience aligns perfectly with your needs.",
-            "proposed_rate": "150.00",
-            "status": "pending",
-        }
+       
+  
+        
+        
+        
+    
+    
+    
+    
+    
