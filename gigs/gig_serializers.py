@@ -35,3 +35,4 @@ class UpdateGigSerializer(serializers.Serializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
     delivery_time = serializers.IntegerField(required=False)
     is_active = serializers.BooleanField(required=False)
+

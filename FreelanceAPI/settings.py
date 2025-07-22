@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'profiles',
     'jobs',
     'gigs',
+    'proposals',
     'drf_yasg'
 ]
 
