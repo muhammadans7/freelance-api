@@ -1,4 +1,6 @@
+
 from accounts.models import User
+
 from jobs.models import Job
 from .models import Proposal
 from rest_framework import serializers
@@ -40,3 +42,9 @@ class ProposalResponseSerializer(serializers.ModelSerializer):
         fields = ["freelancer" , "job" , "cover_letter" , "status"]
     
 
+class UpdateProposal(serializers.ModelSerializer):
+    
+    freelancer = User()
+    
+    
+    
