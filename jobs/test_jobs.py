@@ -14,6 +14,7 @@ from datetime import date
 # Create your tests here.
 
 
+
 class JobServiceTest(TestCase):
     def setUp(self):
         self.client_user = User.objects.create_user(

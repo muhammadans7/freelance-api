@@ -13,7 +13,7 @@ def get_user_byemail(email):
         return None
         
 
-def signUp(username , email , password , role):
+def signup(username , email , password , role):
     
     if User.objects.filter(username=username).exists():
         return None , "INVALID USERNAME"

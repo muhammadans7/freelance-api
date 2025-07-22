@@ -1,14 +1,11 @@
 from rest_framework import serializers
 from .models import User
+from .utils import ROLE_CHOICES
 
 
 class RegisterSerializer(serializers.Serializer):
     
-    ROLE_CHOICES = (
-        ("user" , "User"),
-        ("freelancer" , "Freelancer"),
-        ("client" , "CLient")
-    )
+    
     
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField()
