@@ -1,7 +1,7 @@
 import http
 from .utils import get_token_for_user
 from .serializers import RegisterSerializer , LoginSerializer , UserResponseSerializer
-from .services import signUp , login
+from .services import signup , login
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -27,7 +27,7 @@ class RegisterView(APIView):
         
         try:
             
-            user , error = signUp(**validated_data)
+            user , error = signup(**validated_data)
             
             if error == "INVALID USERNAME" or error == "INVALID PASSWORD":
                 return Response({"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST)
