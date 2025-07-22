@@ -1,6 +1,6 @@
 from accounts.permissions import IsClient 
 from .models import Job
-from .job_serializers import JobSerializer, JobResponseSerializer
+from .job_serializers import JobSerializer, JobResponseSerializer , JobUpdateSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -115,7 +115,7 @@ class JobDetailView(APIView):
         
         user = request.user
         
-        serializer = JobSerializer(data=request.data)
+        serializer = JobUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
         try:
@@ -151,6 +151,9 @@ class JobDetailView(APIView):
                 return Response({"message" :error} , status=status.HTTP_404_NOT_FOUND)
             
             return Response({"message" : "Deleted succesfully"} , status=status.HTTP_200_OK)
+        
+        except Job.DoesNotExist:
+            return Response({"message": "NOT FOUND"} , status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
