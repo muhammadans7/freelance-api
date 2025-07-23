@@ -2,23 +2,26 @@ from django.test import TestCase
 from accounts.models import User
 from .models import Profile
 from profiles.profile_service import create_Profile, get_profile
+from faker import Faker
 
+fake = Faker()
 
 # Create your tests here.
 
 class ProfileServiceTest(TestCase):
     def setUp(self):
         self.client_user = User.objects.create_user(
-            username="client1",
-            email="client1@example.com",
-            password="clientpass",
+            username= fake.user_name(),
+            email= fake.email(),
+            password= fake.password(),
             role="client",
         )
         self.freelancer_user = User.objects.create_user(
-            username="freelancer1",
-            email="free@example.com",
-            password="freepass",
-            role="freelancer",
+            
+            username=fake.user_name(),
+            email= fake.email(),
+            password= fake.password(),
+            role= "freelancer"
         )
 
     def test_create_profile_client_success(self):

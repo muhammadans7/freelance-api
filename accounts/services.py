@@ -1,5 +1,6 @@
 from .models import User
 from django.contrib.auth import authenticate
+from otps.otp_service import send_otp_to_user
 
 #  helper function to get user by email
 
@@ -28,8 +29,9 @@ def signup(username , email , password , role):
         role=role
     )
     
+    send_otp_to_user(user)
+    
     return user , None
-
 
 
 def login(email , password):
