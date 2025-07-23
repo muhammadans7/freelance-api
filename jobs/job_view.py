@@ -7,6 +7,7 @@ from rest_framework import status
 from jobs import job_service
 from drf_yasg.utils import swagger_auto_schema
 
+
 class JobCreateView(APIView):
     
     permission_classes = [IsClient]

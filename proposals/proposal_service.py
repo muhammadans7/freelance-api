@@ -14,6 +14,7 @@ def get_job_byid(job_id):
         return None
 
 
+
 def create_Proposal(freelancer_id , job_id , cover_letter , proposed_rate=None):
 
     freelancer = User.objects.get(id=freelancer_id)

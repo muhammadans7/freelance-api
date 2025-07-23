@@ -1,11 +1,12 @@
 import http
 from .utils import get_token_for_user
 from .serializers import RegisterSerializer , LoginSerializer , UserResponseSerializer
-from .services import signUp , login
+from .services import signup , login
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+
 
 
 # Create your views here.
@@ -27,13 +28,14 @@ class RegisterView(APIView):
         
         try:
             
-            user , error = signUp(**validated_data)
+            user , error = signup(**validated_data)
             
-            if error == "INVALID USERNAME" or error == "INVALID PASSWORD":
+            if error == "INVALID USERNAME" or error == "INVALID EMAIL":
                 return Response({"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST)
             
             response_data = UserResponseSerializer(user)
-            return Response(response_data.data , status=status.HTTP_201_CREATED)
+            return Response({"message" : "EMAIL SENT TO YOU WITH OTP PLZ VERIFY"} , status=status.HTTP_201_CREATED)
+            # return Response(response_data.data , status=status.HTTP_201_CREATED)
             
             
         except Exception as e:
@@ -73,4 +75,5 @@ class LoginView(APIView):
             
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         
