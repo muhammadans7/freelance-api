@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import ProfileViewSet , MyProfileView
 
 router = DefaultRouter()
-router.register(r'profiles', ProfileViewSet, basename='profiles')
+router.register(r'profile', ProfileViewSet, basename='profile')
 
 urlpatterns = [
     path('', include(router.urls)),

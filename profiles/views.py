@@ -9,6 +9,7 @@ from .models import Profile
 from rest_framework.views import APIView
 
 
+
 class ProfileViewSet(ModelViewSet):
     
     permission_classes = [IsAuthenticated]

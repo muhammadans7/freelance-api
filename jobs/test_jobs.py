@@ -11,20 +11,22 @@ from .job_service import (
     deletejob_byid,
 )
 from datetime import date
+from faker import Faker
 # Create your tests here.
 
+fake = Faker()
 
 
 class JobServiceTest(TestCase):
     def setUp(self):
         self.client_user = User.objects.create_user(
-            username="client1",
-            email="client@example.com",
-            password="pass",
+            username=fake.user_name(),
+            email=fake.email(),
+            password=fake.password(),
             role="client",
         )
         self.other_user = User.objects.create_user(
-            username="other", email="other@example.com", password="pass", role="client"
+            username=fake.user_name(), email=fake.email(), password=fake.password(), role="client"
         )
         self.job = create_job(
             client_id=self.client_user.id,

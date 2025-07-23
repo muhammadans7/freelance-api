@@ -7,6 +7,7 @@ from .utils import ROLE_CHOICES
 
 class User(AbstractUser):   
     role = models.CharField(max_length=20, choices=ROLE_CHOICES ,default="user")
+    is_2fa_enabled = models.BooleanField(default=False)
      
     def __str__(self):
         return self.username
