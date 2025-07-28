@@ -6,7 +6,6 @@ from .services import (
     signup,
     login
 )
-
 fake = Faker()
 
 class UserModelTest(TestCase):
@@ -38,7 +37,6 @@ class UserServiceTest(TestCase):
         self.password = fake.password()
         self.role = "freelancer"
         
-
     def test_signup_success(self):
         
         user , error = signup(

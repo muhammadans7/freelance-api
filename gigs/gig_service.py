@@ -4,7 +4,6 @@ from accounts.models import User
 def add_gig(freelancer_id , title , description , price , delivery_time):
     
     freelancer = User.objects.get(id=freelancer_id)
-    
     gig = Gig(freelancer=freelancer , title=title , description=description , price=price , delivery_time=delivery_time)
     gig.save()
     
@@ -13,7 +12,6 @@ def add_gig(freelancer_id , title , description , price , delivery_time):
 def view_myown_gigs(freelancer_id):
     
     freelancer = User.objects.get(id=freelancer_id)
-    
     gigs = Gig.objects.filter(freelancer=freelancer)
     
     if not gigs.exists():
@@ -27,7 +25,6 @@ def get_all_gigs_added():
 def get_gig_byid(freelancer_id , gig_id):
     
     freelancer = User.objects.get(id=freelancer_id)
-    
     gig = Gig.objects.get(id=gig_id)
     
     if gig.freelancer != freelancer:
@@ -37,7 +34,6 @@ def get_gig_byid(freelancer_id , gig_id):
 
 def update_yourgig(gig_id , freelancer_id , **kwargs):  
     freelancer = User.objects.get(id=freelancer_id)
-    
     gig = Gig.objects.get(id=gig_id)
     
     if gig.freelancer != freelancer:
@@ -57,7 +53,6 @@ def delete_gig_byid(gig_id , freelancer_id):
     
     if gig.freelancer != freelancer:
         return None , "UNAUTHORIZED"
-    
     
     deleted , _ =  Gig.objects.filter(id=gig_id).delete()
     

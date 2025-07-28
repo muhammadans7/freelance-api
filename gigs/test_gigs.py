@@ -20,7 +20,6 @@ class GigServiceTest(TestCase):
             username="other" , email="other@example.com" , password="pass", role="client"
         )
         
-        
         self.gig = add_gig(
             freelancer_id=self.freelancer_user.id,
             title="portfolio in html css",

@@ -5,8 +5,7 @@ from otps.otp_service import send_otp_to_user
 def get_user_byemail(email):
     try:
         user = User.objects.get(email=email)
-        return user
-    
+        return user 
     except User.DoesNotExist:
         return None
         

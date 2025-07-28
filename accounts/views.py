@@ -34,10 +34,8 @@ class LoginView(APIView):
     )
     def post(self , request): 
         serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        validated_data = serializer.validated_data
-        
+        serializer.is_valid(raise_exception=True)  
+        validated_data = serializer.validated_data 
         try:   
             user , error = login(**validated_data)
             

@@ -18,12 +18,9 @@ class JobCreateView(APIView):
     def post(self , request):
         
         serializer = JobSerializer(data=request.data)
-        
         serializer.is_valid(raise_exception=True)
-        
         user = request.user
         validated_data = serializer.validated_data
-        
         title = validated_data["title"]
         description = validated_data["description"]
         budget = validated_data["budget"]
@@ -88,8 +85,6 @@ class JobView(APIView):
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-            
-
 class JobDetailView(APIView):
     permission_classes = [IsClient]
     

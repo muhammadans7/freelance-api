@@ -2,7 +2,6 @@ from django.db import models
 from accounts.models import User
 
 class TwoFactorAuth(models.Model):
-    
     user = models.OneToOneField(User , on_delete=models.CASCADE , related_name="two_factor_auth")
     secret = models.CharField(max_length=32)
     is_enabled = models.BooleanField(default=False)

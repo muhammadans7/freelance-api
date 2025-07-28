@@ -6,7 +6,6 @@ from django.utils import timezone
 from accounts.models import User
 
 def get_user_by_email(email):
-    
     try:
         user = User.objects.get(email=email)
         return user

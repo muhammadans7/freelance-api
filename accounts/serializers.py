@@ -12,7 +12,6 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=8)
     
 class UserResponseSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = User
         fields = ["id" , "email" , "username" , "role"]
