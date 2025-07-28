@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'jobs',
     'gigs',
     'proposals',
+    'otps',
+    'twoFA',
     'drf_yasg'
 ]
 
@@ -79,10 +81,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FreelanceAPI.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 
 DATABASES = {
     
@@ -96,6 +96,13 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIK_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL= os.getenv("DEFAULT_FROM_EMAIL")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

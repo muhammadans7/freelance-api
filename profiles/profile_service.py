@@ -1,10 +1,7 @@
 from accounts.models import User
 from .models import Profile
 
-
-
-def create_Profile(user_id , full_name , bio , hourly_rate=None):
-    
+def create_Profile(user_id , full_name , bio , hourly_rate=None): 
     user = User.objects.get(id=user_id)
     
     if (user.role == 'freelancer' or user.role == 'Freelancer') and (hourly_rate == None):

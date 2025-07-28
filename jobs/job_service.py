@@ -2,15 +2,11 @@ from http import client
 from .models import Job
 from accounts.models import User
 
-def create_job(client_id , title , description , budget , deadline):
-    
-    client = User.objects.get(id=client_id)
-    
+def create_job(client_id , title , description , budget , deadline):   
+    client = User.objects.get(id=client_id) 
     job = Job(client=client , title=title , description=description , budget=budget , deadline=deadline)
     job.save()
-    
     return job
-
 
 def get_job_byUserid(clientid):
     
@@ -23,14 +19,8 @@ def get_job_byUserid(clientid):
     
     return jobs , None
 
-
-
 def get_all_jobs():
     return Job.objects.all()
-
-
-
-
 
 def updatejob_byid(job_id , clientid, **kwargs):
     

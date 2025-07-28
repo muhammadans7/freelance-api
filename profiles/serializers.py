@@ -7,15 +7,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username" , "email" , "role"]
         
-
 class ProfileSerializer(serializers.Serializer):
     full_name = serializers.CharField(max_length=150)
     bio = serializers.CharField(max_length=1024, allow_null=True, allow_blank=True)
     hourly_rate = serializers.DecimalField(max_digits=10, decimal_places=2 , required=False)
-    
-    
-class ResponseSerializer(serializers.ModelSerializer):
-    
+      
+class ResponseSerializer(serializers.ModelSerializer):  
     user = UserSerializer()
     class Meta:
         model = Profile
