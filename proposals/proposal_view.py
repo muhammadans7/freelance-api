@@ -9,6 +9,16 @@ from rest_framework import status
 # Create your views here.
 
 
+class GetView(APIView):
+    permission_classes = [IsFreelancer]
+    
+    def post(self , request , job_id):
+        
+        user = request.user
+        
+        serializer = ProposalSerializer(data=request.data)
+
+
 class ProposalCreateView(APIView):
 
     permission_classes = [IsFreelancer]

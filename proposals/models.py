@@ -1,16 +1,9 @@
 from django.db import models
 from accounts.models import User
 from jobs.models import Job
+from .utils import STATUS_CHOICE
 
 class Proposal(models.Model):
-
-    STATUS_CHOICE = (
-        ("pending" , "Pending"),
-        ("accepted" , "Accepted"),
-        ("rejected" , "Rejected") 
-    )
-
-
     freelancer = models.ForeignKey(User, on_delete=models.CASCADE , related_name="proposals")
     job = models.ForeignKey(Job , on_delete=models.CASCADE , related_name="proposals")
     cover_letter = models.TextField(max_length=1024)
