@@ -1,5 +1,3 @@
-
-
 from django.test import TestCase
 from accounts.models import User
 from jobs.models import Job
@@ -12,10 +10,8 @@ from .job_service import (
 )
 from datetime import date
 from faker import Faker
-# Create your tests here.
 
 fake = Faker()
-
 
 class JobServiceTest(TestCase):
     def setUp(self):

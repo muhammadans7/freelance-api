@@ -14,14 +14,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
-# from django.urls import path , include
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('api/', include("accounts.urls")),
-#     path('api/' , include("profiles.urls"))
-# ]
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import permissions
@@ -41,10 +33,8 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-urlpatterns = [
-    
+urlpatterns = [ 
     path('admin/', admin.site.urls),
-    
     path('api/', include('accounts.urls')),  
     path('api/' , include("profiles.urls")),
     path('api/' , include("jobs.urls")),

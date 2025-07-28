@@ -11,7 +11,6 @@ def get_token_for_user(user):
         "access" : str(refresh.access_token)
     }
 
-
 ROLE_CHOICES = (
         ("user" , "User"),
         ("freelancer" , "Freelancer"),

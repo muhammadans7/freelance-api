@@ -7,13 +7,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 fake = Faker()
 
-
 def get_auth_client(user):
     token = RefreshToken.for_user(user)
     client = APIClient()
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(token.access_token)}")
     return client
-
 
 class ProfileViewTests(APITestCase):
 
@@ -56,7 +54,6 @@ class ProfileViewTests(APITestCase):
         self.assertEqual(response.data["message"], "PROFILE ALREADY EXISTS")
 
     def test_get_my_profile_success(self):
-        
         profile = Profile.objects.create(
             user=self.user, full_name="Test User", bio="bio", hourly_rate=60
         )

@@ -5,8 +5,6 @@ from faker import Faker
 from accounts.models import User
 
 fake = Faker()
-
-
 class RegisterViewTests(APITestCase):
 
     def setUp(self):
@@ -20,7 +18,6 @@ class RegisterViewTests(APITestCase):
             "password": self.password,
             "role": "freelancer",
         }
-
         response = self.client.post(self.url, data=payload, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -34,14 +31,12 @@ class RegisterViewTests(APITestCase):
             password=self.password,
             role="client",
         )
-
         payload = {
             "username": "sameuser",
             "email": fake.email(),
             "password": self.password,
             "role": "client",
         }
-
         response = self.client.post(self.url, data=payload, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -55,14 +50,12 @@ class RegisterViewTests(APITestCase):
             password=self.password,
             role="client",
         )
-
         payload = {
             "username": fake.user_name(),
             "email": email,
             "password": self.password,
             "role": "client",
         }
-
         response = self.client.post(self.url, data=payload, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

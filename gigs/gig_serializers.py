@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username" , "email"]
 
-
 class GigSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=150)
     description = serializers.CharField(max_length=1024)
@@ -15,8 +14,6 @@ class GigSerializer(serializers.Serializer):
     delivery_time = serializers.IntegerField()
     is_active = serializers.BooleanField(default=True)
 
-
-#  for response
 class GigResponseSerializer(serializers.ModelSerializer):
 
     freelancer =  UserSerializer()
@@ -24,10 +21,6 @@ class GigResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gig
         fields = ["freelancer" , "title" , "description" , "price" , "delivery_time" , "is_active"]
-
-
-# for updating
-
 
 class UpdateGigSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=150, required=False)

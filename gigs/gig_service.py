@@ -1,7 +1,6 @@
 from .models import Gig
 from accounts.models import User
 
-
 def add_gig(freelancer_id , title , description , price , delivery_time):
     
     freelancer = User.objects.get(id=freelancer_id)
@@ -11,7 +10,6 @@ def add_gig(freelancer_id , title , description , price , delivery_time):
     
     return gig
 
-#  a logged in freelancer can view all his gigs
 def view_myown_gigs(freelancer_id):
     
     freelancer = User.objects.get(id=freelancer_id)
@@ -22,14 +20,9 @@ def view_myown_gigs(freelancer_id):
         return None , "You have not added any gig yet"
     
     return gigs , None
-    
-    
-
 
 def get_all_gigs_added():
     return Gig.objects.all()
-
-
 
 def get_gig_byid(freelancer_id , gig_id):
     
@@ -42,9 +35,7 @@ def get_gig_byid(freelancer_id , gig_id):
     
     return gig , None
 
-
-def update_yourgig(gig_id , freelancer_id , **kwargs):
-    
+def update_yourgig(gig_id , freelancer_id , **kwargs):  
     freelancer = User.objects.get(id=freelancer_id)
     
     gig = Gig.objects.get(id=gig_id)
@@ -59,9 +50,7 @@ def update_yourgig(gig_id , freelancer_id , **kwargs):
         
     return gig , None
 
-
 def delete_gig_byid(gig_id , freelancer_id):
-    
     freelancer = User.objects.get(id=freelancer_id)
     
     gig = Gig.objects.get(id=gig_id)

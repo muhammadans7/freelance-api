@@ -5,8 +5,6 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from accounts.models import User
 
-# helper function to get user
-
 def get_user_by_email(email):
     
     try:
@@ -15,11 +13,8 @@ def get_user_by_email(email):
     except User.DoesNotExist:
         return None
 
-
 def generate_otp():
     return str(secrets.randbelow(899999) + 100000)
-
-
 
 def send_otp_to_user(user):
 
@@ -31,13 +26,10 @@ def send_otp_to_user(user):
         is_verified=False,
         defaults={"code" : code , "expires_at": expiry}
     )
-
     subject = "Your OTP Code"
     message = f"hello {user.username} , \n\n Your OTP is {code} , It expires in 10 minutes"
 
     send_mail(subject , message ,  None , [user.email])
-
-
 
 def verify_user_otp(email , otp):
     
@@ -57,6 +49,3 @@ def verify_user_otp(email , otp):
     otp_entry.save()
     
     return True , "OTP verified Succesfully"
-    
-
-

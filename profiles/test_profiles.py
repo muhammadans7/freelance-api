@@ -6,8 +6,6 @@ from faker import Faker
 
 fake = Faker()
 
-# Create your tests here.
-
 class ProfileServiceTest(TestCase):
     def setUp(self):
         self.client_user = User.objects.create_user(
@@ -79,6 +77,5 @@ class ProfileServiceTest(TestCase):
         )
 
         retrieved_profile = get_profile(self.client_user.id)
-
         self.assertEqual(created_profile.id, retrieved_profile.id)
         self.assertEqual(retrieved_profile.user, self.client_user)

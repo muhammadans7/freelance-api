@@ -50,12 +50,7 @@ from .proposal_service import (
 )
 from datetime import date
 
-
-# Create your tests here.
-
-
-class ProposalServiceTest(TestCase):
-    
+class ProposalServiceTest(TestCase):   
     def setUp(self):
         self.freelancer_user = User.objects.create_user(
             username="freelancer1",
@@ -68,8 +63,6 @@ class ProposalServiceTest(TestCase):
             username="client1" , email="client@example.com" , password="pass" , role="client"
         )
         
-        
-        
         self.job = create_job(
             client_id=self.client_user.id,
             title="Website Deisgn",
@@ -78,16 +71,13 @@ class ProposalServiceTest(TestCase):
             deadline=date.today()
         )
         
-
- 
     def test_create_proposal_success(self):
         proposal , error = create_Proposal(
             freelancer_id=self.freelancer_user.id,
             job_id=self.job.id,
             cover_letter="I have experience in web dev",
             proposed_rate=250
-        )
-        
+        )     
         self.assertIsNotNone(proposal)
         self.assertIsNone(error)
         self.assertEqual(proposal.job, self.job)

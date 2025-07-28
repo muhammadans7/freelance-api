@@ -7,11 +7,8 @@ from .services import (
     login
 )
 
-
-# making an instance of faker
 fake = Faker()
 
-#  testing for model
 class UserModelTest(TestCase):
 
     def test_user_creation(self):

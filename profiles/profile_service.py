@@ -1,8 +1,6 @@
 from accounts.models import User
 from .models import Profile
 
-
-
 def create_Profile(user_id , full_name , bio , hourly_rate=None):
     
     user = User.objects.get(id=user_id)

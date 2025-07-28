@@ -7,12 +7,9 @@ from rest_framework import status
 from jobs import job_service
 from drf_yasg.utils import swagger_auto_schema
 
-
 class JobCreateView(APIView):
     
-    permission_classes = [IsClient]
-    
-     
+    permission_classes = [IsClient] 
     @swagger_auto_schema(
         request_body=JobSerializer, 
         responses={201: JobResponseSerializer}
@@ -33,7 +30,6 @@ class JobCreateView(APIView):
         deadline = validated_data["deadline"]
         
         try:
-            
             job = job_service.create_job(
                 client_id=user.id,
                 title=title,
@@ -53,21 +49,14 @@ class JobCreateView(APIView):
             
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        
     
-    
-
 class MyJobView(APIView):
     
     permission_classes = [IsClient]
     
     def get(self, request):
-        
-        user = request.user
-        
-        try:
-            
+        user = request.user 
+        try:     
             jobs  , error = job_service.get_job_byUserid(user.id)
             
             if error:
@@ -81,21 +70,14 @@ class MyJobView(APIView):
                 
                 }
                 , status=status.HTTP_200_OK)
-        
-            
-        
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
-class JobView(APIView):
-    
-    
-    
+class JobView(APIView):  
     def get(self, request):
         
-        try:
-            
+        try:  
             jobs = job_service.get_all_jobs()
             response_data = JobResponseSerializer(jobs , many=True)
             
@@ -109,13 +91,11 @@ class JobView(APIView):
             
 
 class JobDetailView(APIView):
-    
     permission_classes = [IsClient]
     
     def put(self, request, job_id):
         
         user = request.user
-        
         serializer = JobUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
@@ -137,12 +117,10 @@ class JobDetailView(APIView):
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     
-    def delete(self , request , job_id):
-        
+    def delete(self , request , job_id):   
         user = request.user
         
         try:
-            
             deleted , error = job_service.deletejob_byid(job_id=job_id , client_id=user.id)
             
             if error == "UNAUTHORIZED":

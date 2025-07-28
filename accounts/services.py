@@ -2,10 +2,7 @@ from .models import User
 from django.contrib.auth import authenticate
 from otps.otp_service import send_otp_to_user
 
-#  helper function to get user by email
-
 def get_user_byemail(email):
-    
     try:
         user = User.objects.get(email=email)
         return user
@@ -13,7 +10,6 @@ def get_user_byemail(email):
     except User.DoesNotExist:
         return None
         
-
 def signup(username , email , password , role):
     
     if User.objects.filter(username=username).exists():
@@ -28,11 +24,9 @@ def signup(username , email , password , role):
         password=password,
         role=role
     )
-    
     send_otp_to_user(user)
     
     return user , None
-
 
 def login(email , password):
     

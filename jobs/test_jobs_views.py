@@ -7,8 +7,6 @@ from jobs.models import Job
 from datetime import date
 
 fake = Faker()
-
-
 class JobViewTests(APITestCase):
 
     def setUp(self):

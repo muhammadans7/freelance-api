@@ -1,8 +1,7 @@
 from django.db import models
 from accounts.models import User
 
-class Gig(models.Model):
-    
+class Gig(models.Model): 
     freelancer = models.ForeignKey(User, on_delete=models.CASCADE , related_name="gigs")
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1024)

@@ -12,15 +12,10 @@ class VerifyOTPView(APIView):
     def post(self , request):
         
         serializer = VerifyOTPSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        validated_data = serializer.validated_data
-        
-        
-        try:
-            
-            success , message = verify_user_otp(**validated_data)
-            
+        serializer.is_valid(raise_exception=True)   
+        validated_data = serializer.validated_data  
+        try:    
+            success , message = verify_user_otp(**validated_data)  
             if not success:
                 return  Response({"message" : message} , status=status.HTTP_400_BAD_REQUEST)
             

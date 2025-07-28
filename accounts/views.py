@@ -7,59 +7,38 @@ from rest_framework import status
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 
-
-
-# Create your views here.
-
-class RegisterView(APIView):
-    
+class RegisterView(APIView):  
     @swagger_auto_schema(
         request_body=RegisterSerializer, 
         responses={201: UserResponseSerializer}
-    )
-    
+    ) 
     def post(self, request):
-        
-        
         serializer = RegisterSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
+        serializer.is_valid(raise_exception=True)     
         validated_data = serializer.validated_data
         
-        try:
-            
+        try:     
             user , error = signup(**validated_data)
             
             if error == "INVALID USERNAME" or error == "INVALID EMAIL":
-                return Response({"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST)
-            
+                return Response({"message": "User already exists"}, status=status.HTTP_400_BAD_REQUEST)   
             response_data = UserResponseSerializer(user)
-            return Response({"message" : "EMAIL SENT TO YOU WITH OTP PLZ VERIFY"} , status=status.HTTP_201_CREATED)
-            # return Response(response_data.data , status=status.HTTP_201_CREATED)
-            
+            return Response({"message" : "EMAIL SENT TO YOU WITH OTP PLZ VERIFY"} , status=status.HTTP_201_CREATED)      
             
         except Exception as e:
             return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        
-        
-
 class LoginView(APIView):
-    
     @swagger_auto_schema(
         request_body=LoginSerializer,  
         responses={201: UserResponseSerializer}
     )
-    
-    def post(self , request):
-        
+    def post(self , request): 
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
         validated_data = serializer.validated_data
         
-        try:
-            
+        try:   
             user , error = login(**validated_data)
             
             if error == "INVALID EMAIL" or error == "INVALID PASSWORD":
@@ -74,6 +53,4 @@ class LoginView(APIView):
             }, status=status.HTTP_200_OK)
             
         except Exception as e:
-            return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        
+            return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR) 

@@ -1,9 +1,6 @@
 from django.db import models
 from accounts.models import User
 from django.utils import timezone
-from django.conf import settings
-
-# Create your models here.
 
 class OTPVerification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
