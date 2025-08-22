@@ -89,12 +89,11 @@ class TokenCookieView(APIView):
 
             tokens = get_token_for_user(user)
 
-            # Build response with access token in body and refresh token in HttpOnly cookie
+           
             response = Response(
                 {"access": tokens.get("access")}, status=status.HTTP_200_OK
             )
 
-            # Cookie settings: secure if env says so (for production behind HTTPS)
             cookie_secure = os.getenv("COOKIE_SECURE", "False").lower() in (
                 "1",
                 "true",
@@ -103,7 +102,7 @@ class TokenCookieView(APIView):
             cookie_samesite = os.getenv("COOKIE_SAMESITE", "Lax")
             cookie_domain = os.getenv("COOKIE_DOMAIN", None)
 
-            # Set refresh token as HttpOnly cookie
+          
             response.set_cookie(
                 key="refresh",
                 value=tokens.get("refresh"),
@@ -116,6 +115,27 @@ class TokenCookieView(APIView):
 
             return response
 
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class MeView(APIView):
+    """Return basic info about the currently authenticated user."""
+
+    permission_classes = []
+
+    def get(self, request):
+        try:
+            user = request.user
+            if not user or not user.is_authenticated:
+                return Response(
+                    {"message": "Not authenticated"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+            serializer = UserResponseSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
