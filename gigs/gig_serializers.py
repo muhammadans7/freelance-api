@@ -15,7 +15,6 @@ class GigSerializer(serializers.Serializer):
     is_active = serializers.BooleanField(default=True)
 
 class GigResponseSerializer(serializers.ModelSerializer):
-
     freelancer =  UserSerializer()
 
     class Meta:

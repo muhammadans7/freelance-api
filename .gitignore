@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 *.py[cod]
+*.py[cod]
 *.pyo
 *.pyd
 *.pyc
@@ -35,6 +36,8 @@ staticfiles/
 venv/
 .env
 .env.*
+.venv2
+docs
 
 # PyCharm
 .idea/
@@ -60,4 +63,3 @@ swagger.yaml
 
 # System
 Thumbs.db
-
