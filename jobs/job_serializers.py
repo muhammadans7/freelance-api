@@ -18,9 +18,19 @@ class JobSerializer(serializers.Serializer):
 
 
 class JobResponseSerializer(serializers.ModelSerializer):
+    client = UserSerializer(read_only=True)
+
     class Meta:
         model = Job
-        fields = ["id", "title", "description", "budget", "deadline", "category"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "budget",
+            "deadline",
+            "category",
+            "client",
+        ]
 
 
 class JobUpdateSerializer(serializers.Serializer):

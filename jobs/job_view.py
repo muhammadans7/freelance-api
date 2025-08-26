@@ -91,9 +91,28 @@ class JobView(APIView):
 
 
 class JobDetailView(APIView):
-    permission_classes = [IsClient]
+    def get(self, request, job_id):
+        """Get job details - accessible by all authenticated users"""
+        try:
+            job = Job.objects.select_related("client").get(id=job_id)
+            response_data = JobResponseSerializer(job)
+            return Response(response_data.data, status=status.HTTP_200_OK)
+        except Job.DoesNotExist:
+            return Response(
+                {"message": "Job not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
     def put(self, request, job_id):
+        """Update job - only for clients who own the job"""
+        if not hasattr(request.user, "role") or request.user.role != "client":
+            return Response(
+                {"message": "Only clients can update jobs"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         user = request.user
         serializer = JobUpdateSerializer(data=request.data)

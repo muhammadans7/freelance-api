@@ -1,16 +1,33 @@
 from accounts import serializers
 from .models import Proposal
 from accounts.permissions import IsFreelancer
-from .proposal_serializers import ProposalSerializer , ProposalResponseSerializer
-from proposals import  proposal_service
+from .proposal_serializers import ProposalSerializer, ProposalResponseSerializer
+from proposals import proposal_service
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+
 class ProposalCreateView(APIView):
     permission_classes = [IsFreelancer]
 
-    def post(self , request , job_id):
+    def get(self, request, job_id):
+        """Check if freelancer has already submitted a proposal for this job"""
+        user = request.user
+        try:
+            proposal = Proposal.objects.get(freelancer=user, job_id=job_id)
+            serializer = ProposalResponseSerializer(proposal)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Proposal.DoesNotExist:
+            return Response(
+                {"message": "No proposal found"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def post(self, request, job_id):
         user = request.user
         serializer = ProposalSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -20,24 +37,25 @@ class ProposalCreateView(APIView):
         proposed_rate = validated_data.get("proposed_rate")
 
         try:
-            proposal , error = proposal_service.create_Proposal(
+            proposal, error = proposal_service.create_Proposal(
                 freelancer_id=user.id,
                 job_id=job_id,
                 cover_letter=cover_letter,
-                proposed_rate=proposed_rate
+                proposed_rate=proposed_rate,
             )
 
             if error == "INVALID JOB ID":
-                return Response({"message" : error} , status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": error}, status=status.HTTP_400_BAD_REQUEST)
 
-            if error == "You’ve already submitted a proposal for this job.":
-                return Response({"message" : error} , status=status.HTTP_400_BAD_REQUEST)
+            if error == "You've already submitted a proposal for this job.":
+                return Response({"message": error}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"message" : "Proposal was submitted succesfully"} , status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "Proposal was submitted succesfully"},
+                status=status.HTTP_201_CREATED,
+            )
 
         except Exception as e:
-            return Response({"error" : str(e)} , status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-    
-    
-    
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

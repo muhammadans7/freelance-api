@@ -26,9 +26,26 @@ class ProfileViewSet(ModelViewSet):
         bio = validated_data.get("bio")
         hourly_rate = validated_data.get("hourly_rate")
 
+        new_fields = {
+            "niche": validated_data.get("niche"),
+            "skills": validated_data.get("skills", []),
+            "experience_level": validated_data.get("experience_level"),
+            "years_of_experience": validated_data.get("years_of_experience"),
+            "languages": validated_data.get("languages", []),
+            "preferred_project_types": validated_data.get(
+                "preferred_project_types", []
+            ),
+            "minimum_project_budget": validated_data.get("minimum_project_budget"),
+            "response_time": validated_data.get("response_time"),
+        }
+
         try:
             profile, error = create_Profile(
-                user_id=user.id, full_name=full_name, bio=bio, hourly_rate=hourly_rate
+                user_id=user.id,
+                full_name=full_name,
+                bio=bio,
+                hourly_rate=hourly_rate,
+                **new_fields
             )
 
             if error == "PROFILE ALREADY EXISTS" or error == "NO HOURLY_RATE":
@@ -45,7 +62,7 @@ class ProfileViewSet(ModelViewSet):
             )
 
     def update(self, request, pk=None, *args, **kwargs):
-       
+
         partial = bool(kwargs.get("partial", False))
         try:
             profile = Profile.objects.get(pk=pk)
@@ -65,6 +82,7 @@ class ProfileViewSet(ModelViewSet):
         )
         serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
+
         full_name = (
             validated_data.get("full_name") if "full_name" in validated_data else None
         )
@@ -75,6 +93,28 @@ class ProfileViewSet(ModelViewSet):
             if hourly_rate_provided
             else profile.hourly_rate
         )
+
+        if "niche" in validated_data:
+            profile.niche = validated_data.get("niche")
+        if "skills" in validated_data:
+            profile.skills = validated_data.get("skills", [])
+        if "experience_level" in validated_data:
+            profile.experience_level = validated_data.get("experience_level")
+        if "years_of_experience" in validated_data:
+            profile.years_of_experience = validated_data.get("years_of_experience")
+        if "languages" in validated_data:
+            profile.languages = validated_data.get("languages", [])
+        if "preferred_project_types" in validated_data:
+            profile.preferred_project_types = validated_data.get(
+                "preferred_project_types", []
+            )
+        if "minimum_project_budget" in validated_data:
+            profile.minimum_project_budget = validated_data.get(
+                "minimum_project_budget"
+            )
+        if "response_time" in validated_data:
+            profile.response_time = validated_data.get("response_time")
+
         user_role = getattr(profile.user, "role", "") or ""
         if user_role.lower() == "freelancer":
             if (not partial) or hourly_rate_provided:
