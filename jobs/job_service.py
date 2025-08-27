@@ -1,9 +1,19 @@
-from http import client
 from .models import Job
 from accounts.models import User
 
 
-def create_job(client_id, title, description, budget, deadline, category="other"):
+def create_job(
+    client_id,
+    title,
+    description,
+    budget,
+    deadline,
+    category="other",
+    skills_required=None,
+    experience_level="intermediate",
+    project_duration="medium_term",
+    job_type="fixed_price",
+):
     client = User.objects.get(id=client_id)
     job = Job(
         client=client,
@@ -12,6 +22,10 @@ def create_job(client_id, title, description, budget, deadline, category="other"
         budget=budget,
         deadline=deadline,
         category=category,
+        skills_required=skills_required or [],
+        experience_level=experience_level,
+        project_duration=project_duration,
+        job_type=job_type,
     )
     job.save()
     return job

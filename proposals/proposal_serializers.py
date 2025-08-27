@@ -1,14 +1,30 @@
 from accounts.models import User
 from jobs.models import Job
+from profiles.models import Profile
 from .models import Proposal
 from rest_framework import serializers
 from .utils import STATUS_CHOICE
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ["bio", "skills", "hourly_rate", "experience_level"]
+
+
 class UserSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(read_only=True, allow_null=True)
+
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["id", "username", "email", "first_name", "last_name", "profile"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Handle case where user doesn't have a profile
+        if not hasattr(instance, "profile"):
+            data["profile"] = None
+        return data
 
 
 class JobSerializer(serializers.ModelSerializer):

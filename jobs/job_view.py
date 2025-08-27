@@ -16,18 +16,34 @@ class JobCreateView(APIView):
         request_body=JobSerializer, responses={201: JobResponseSerializer}
     )
     def post(self, request):
-
-        serializer = JobSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = request.user
-        validated_data = serializer.validated_data
-        title = validated_data["title"]
-        description = validated_data["description"]
-        budget = validated_data["budget"]
-        deadline = validated_data["deadline"]
-        category = validated_data.get("category", "other")
+        print(f"DEBUG: Request data: {request.data}")
+        print(f"DEBUG: User: {request.user}")
+        print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
+        if hasattr(request.user, "role"):
+            print(f"DEBUG: User role: {request.user.role}")
 
         try:
+            serializer = JobSerializer(data=request.data)
+            print(f"DEBUG: Serializer created")
+
+            serializer.is_valid(raise_exception=True)
+            print(f"DEBUG: Serializer is valid")
+
+            user = request.user
+            validated_data = serializer.validated_data
+            print(f"DEBUG: Validated data: {validated_data}")
+
+            title = validated_data["title"]
+            description = validated_data["description"]
+            budget = validated_data["budget"]
+            deadline = validated_data["deadline"]
+            category = validated_data.get("category", "other")
+            skills_required = validated_data.get("skills_required", [])
+            experience_level = validated_data.get("experience_level", "intermediate")
+            project_duration = validated_data.get("project_duration", "medium_term")
+            job_type = validated_data.get("job_type", "fixed_price")
+            print(f"DEBUG: About to call job_service.create_job")
+
             job = job_service.create_job(
                 client_id=user.id,
                 title=title,
@@ -35,9 +51,15 @@ class JobCreateView(APIView):
                 budget=budget,
                 deadline=deadline,
                 category=category,
+                skills_required=skills_required,
+                experience_level=experience_level,
+                project_duration=project_duration,
+                job_type=job_type,
             )
+            print(f"DEBUG: Job created: {job}")
 
             response_data = JobResponseSerializer(job)
+            print(f"DEBUG: Response data serialized")
 
             return Response(
                 {"message": "Job was posted succesfully", "job": response_data.data},
@@ -45,6 +67,10 @@ class JobCreateView(APIView):
             )
 
         except Exception as e:
+            print(f"DEBUG: Exception occurred: {str(e)}")
+            import traceback
+
+            print(f"DEBUG: Traceback: {traceback.format_exc()}")
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -52,9 +78,21 @@ class JobCreateView(APIView):
 
 class MyJobView(APIView):
 
-    permission_classes = [IsClient]
-
     def get(self, request):
+        # Check if user is authenticated
+        if not request.user.is_authenticated:
+            return Response(
+                {"error": "Authentication required"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # Check if user is a client
+        if not hasattr(request.user, "role") or request.user.role != "client":
+            return Response(
+                {"error": "Only clients can view their jobs"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
         user = request.user
         try:
             jobs, error = job_service.get_job_byUserid(user.id)

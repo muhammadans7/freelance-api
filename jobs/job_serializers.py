@@ -6,7 +6,7 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["id", "username", "email"]
 
 
 class JobSerializer(serializers.Serializer):
@@ -15,6 +15,13 @@ class JobSerializer(serializers.Serializer):
     budget = serializers.DecimalField(max_digits=10, decimal_places=2)
     deadline = serializers.DateField()
     category = serializers.CharField(max_length=20, required=False)
+    # Additional fields sent by frontend but not stored in model (for now)
+    skills_required = serializers.ListField(
+        child=serializers.CharField(max_length=100), required=False
+    )
+    experience_level = serializers.CharField(max_length=50, required=False)
+    project_duration = serializers.CharField(max_length=50, required=False)
+    job_type = serializers.CharField(max_length=50, required=False)
 
 
 class JobResponseSerializer(serializers.ModelSerializer):
@@ -29,7 +36,12 @@ class JobResponseSerializer(serializers.ModelSerializer):
             "budget",
             "deadline",
             "category",
+            "skills_required",
+            "experience_level",
+            "project_duration",
+            "job_type",
             "client",
+            "created_at",
         ]
 
 
