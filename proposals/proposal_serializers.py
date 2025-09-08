@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # Handle case where user doesn't have a profile
+     
         if not hasattr(instance, "profile"):
             data["profile"] = None
         return data

@@ -15,7 +15,7 @@ class JobSerializer(serializers.Serializer):
     budget = serializers.DecimalField(max_digits=10, decimal_places=2)
     deadline = serializers.DateField()
     category = serializers.CharField(max_length=20, required=False)
-    # Additional fields sent by frontend but not stored in model (for now)
+   
     skills_required = serializers.ListField(
         child=serializers.CharField(max_length=100), required=False
     )

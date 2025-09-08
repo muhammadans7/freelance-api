@@ -101,9 +101,6 @@ class ProposalDetailView(APIView):
             )
 
 
-# === CLIENT VIEWS FOR MANAGING PROPOSALS ===
-
-
 class JobProposalsView(APIView):
     """Client can view all proposals received for their specific job"""
 
@@ -112,10 +109,10 @@ class JobProposalsView(APIView):
     def get(self, request, job_id):
         """Get all proposals for a specific job (only job owner can access)"""
         try:
-            # Ensure the job belongs to the current client
+           
             job = get_object_or_404(Job, id=job_id, client=request.user)
 
-            # Get all proposals for this job
+            
             proposals = (
                 Proposal.objects.filter(job=job)
                 .select_related("freelancer")
@@ -125,7 +122,7 @@ class JobProposalsView(APIView):
 
             serializer = ProposalResponseSerializer(proposals, many=True)
 
-            # Add summary data
+         
             proposal_summary = {
                 "total_proposals": proposals.count(),
                 "pending_proposals": proposals.filter(status="pending").count(),
@@ -153,11 +150,9 @@ class JobProposalsView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
         except Exception as e:
-            # Add more detailed error logging
+         
             import traceback
 
-            print(f"Error in JobProposalsView: {str(e)}")
-            print(f"Traceback: {traceback.format_exc()}")
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
@@ -171,14 +166,14 @@ class ProposalActionView(APIView):
     def patch(self, request, proposal_id):
         """Accept or reject a proposal"""
         try:
-            # Get the proposal and ensure it belongs to client's job
+           
             proposal = get_object_or_404(
                 Proposal.objects.select_related("job", "freelancer"),
                 id=proposal_id,
                 job__client=request.user,
             )
 
-            action = request.data.get("action")  # "accept" or "reject"
+            action = request.data.get("action")  
 
             if action not in ["accept", "reject"]:
                 return Response(
@@ -186,9 +181,9 @@ class ProposalActionView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # If accepting, reject all other proposals for the same job
+          
             if action == "accept":
-                # Check if another proposal is already accepted for this job
+               
                 existing_accepted = (
                     Proposal.objects.filter(job=proposal.job, status="accepted")
                     .exclude(id=proposal.id)
@@ -203,11 +198,11 @@ class ProposalActionView(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
-                # Accept this proposal
+           
                 proposal.status = "accepted"
                 proposal.save()
 
-                # Reject all other pending proposals for this job
+              
                 Proposal.objects.filter(job=proposal.job, status="pending").exclude(
                     id=proposal.id
                 ).update(status="rejected")
@@ -215,7 +210,7 @@ class ProposalActionView(APIView):
                 # TODO: Create project/contract here
                 message = f"Proposal accepted successfully! Project will be created."
 
-            else:  # reject
+            else:  
                 if proposal.status == "accepted":
                     return Response(
                         {"message": "Cannot reject an already accepted proposal"},
@@ -226,7 +221,7 @@ class ProposalActionView(APIView):
                 proposal.save()
                 message = "Proposal rejected successfully"
 
-            # Return updated proposal data
+          
             serializer = ProposalResponseSerializer(proposal)
             return Response(
                 {"message": message, "proposal": serializer.data},
@@ -254,17 +249,16 @@ class ClientProposalsOverviewView(APIView):
     def get(self, request):
         """Get overview of all proposals for client's jobs"""
         try:
-            # Get all jobs posted by this client
+       
             client_jobs = Job.objects.filter(client=request.user)
 
-            # Get all proposals for these jobs
+        
             proposals = (
                 Proposal.objects.filter(job__in=client_jobs)
                 .select_related("job", "freelancer", "freelancer__profile")
                 .order_by("-created_at")
             )
 
-            # Group proposals by job
             jobs_with_proposals = {}
             total_stats = {
                 "total_proposals": 0,
@@ -297,15 +291,12 @@ class ClientProposalsOverviewView(APIView):
                         },
                     }
 
-                # Add proposal to job
                 proposal_data = ProposalResponseSerializer(proposal).data
                 jobs_with_proposals[job_id]["proposals"].append(proposal_data)
 
-                # Update stats
                 jobs_with_proposals[job_id]["stats"][proposal.status] += 1
                 jobs_with_proposals[job_id]["stats"]["total"] += 1
 
-                # Update total stats
                 total_stats["total_proposals"] += 1
                 total_stats[f"{proposal.status}_proposals"] += 1
 

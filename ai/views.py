@@ -1,7 +1,3 @@
-"""
-AI Views for FreelanceHub Platform
-API endpoints for AI-powered features
-"""
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

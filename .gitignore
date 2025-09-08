@@ -44,9 +44,7 @@ docs
 # PyCharm
 .idea/
 
-# Migrations (Optional: include if you want clean versioning)
-**/migrations/
-!*/migrations/__init__.py
+
 
 # Coverage / Testing
 htmlcov/
