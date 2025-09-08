@@ -25,9 +25,6 @@ COPY . /app/
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser
-
-# Create staticfiles directory and set permissions
-RUN mkdir -p /app/staticfiles
 RUN chown -R appuser:appuser /app
 USER appuser
 
