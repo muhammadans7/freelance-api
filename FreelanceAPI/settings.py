@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -53,6 +58,7 @@ INSTALLED_APPS = [
     "proposals",
     "otps",
     "twoFA",
+    "ai",  # AI features app
     "drf_yasg",
 ]
 
@@ -89,16 +95,21 @@ WSGI_APPLICATION = "FreelanceAPI.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+# Use DATABASE_URL if available (for Docker), otherwise use individual settings
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL and dj_database_url:
+    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
+        }
     }
-}
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -110,9 +121,9 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 # CORS settings - allow React dev server by default
 # Set CORS_ALLOWED_ORIGINS env var to a comma-separated list in production
-CORS_ALLOWED_ORIGINS = os.getenv(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:5173"
-).split(",")
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(
+    ","
+)
 CORS_ALLOW_CREDENTIALS = True
 
 # Password validation
@@ -167,8 +178,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
+OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
+OPENAI_MAX_TOKENS_JOB_DESCRIPTION = int(
+    os.environ.get("OPENAI_MAX_TOKENS_JOB_DESCRIPTION", "500")
+)
+OPENAI_MAX_TOKENS_PROPOSAL = int(os.environ.get("OPENAI_MAX_TOKENS_PROPOSAL", "400"))
+OPENAI_MAX_TOKENS_ASSISTANT = int(os.environ.get("OPENAI_MAX_TOKENS_ASSISTANT", "200"))
+OPENAI_TEMPERATURE = float(os.environ.get("OPENAI_TEMPERATURE", "0.7"))
+OPENAI_ASSISTANT_TEMPERATURE = float(
+    os.environ.get("OPENAI_ASSISTANT_TEMPERATURE", "0.6")
+)

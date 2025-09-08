@@ -35,7 +35,9 @@ staticfiles/
 # Virtual Environment
 venv/
 .env
-.env.*
+.env.local
+.env.development
+.env.production
 .venv2
 docs
 

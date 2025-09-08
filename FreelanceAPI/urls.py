@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import permissions
@@ -23,7 +24,7 @@ from drf_yasg import openapi
 schema_view = get_schema_view(
     openapi.Info(
         title="Freelance API",
-        default_version='v1',
+        default_version="v1",
         description="API for freelancing platform (Clients, Freelancers, Gigs, Jobs, Proposals)",
         terms_of_service="https://www.example.com/terms/",
         contact=openapi.Contact(email="support@example.com"),
@@ -33,16 +34,25 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-urlpatterns = [ 
-    path('admin/', admin.site.urls),
-    path('api/', include('accounts.urls')),  
-    path('api/' , include("profiles.urls")),
-    path('api/' , include("jobs.urls")),
-    path('api/' , include("gigs.urls")),
-    path('api/' , include("proposals.urls")),
-    path('api/' , include("otps.urls")),
-    path('api/' , include("twoFA.urls")),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),  # Swagger UI
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),            # ReDoc UI
-    path('swagger.json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),            # Raw schema
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("api/", include("accounts.urls")),
+    path("api/", include("profiles.urls")),
+    path("api/", include("jobs.urls")),
+    path("api/", include("gigs.urls")),
+    path("api/", include("proposals.urls")),
+    path("api/", include("otps.urls")),
+    path("api/", include("twoFA.urls")),
+    path("api/ai/", include("ai.urls")),  
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),  # Swagger UI
+    path(
+        "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),  # ReDoc UI
+    path(
+        "swagger.json/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    ),  # Raw schema
 ]
