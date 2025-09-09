@@ -48,9 +48,16 @@ class LoginView(APIView):
         try:
             user, error = login(**validated_data)
 
-            if error == "INVALID EMAIL" or error == "INVALID PASSWORD":
+            if error == "INVALID EMAIL":
                 return Response(
-                    {"message": "Invalid credentials"},
+                    {
+                        "message": "No account found with this email address. Please check your email or sign up."
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+            elif error == "INVALID PASSWORD":
+                return Response(
+                    {"message": "Incorrect password. Please try again."},
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
 
@@ -81,15 +88,21 @@ class TokenCookieView(APIView):
 
         try:
             user, error = login(**validated_data)
-            if error == "INVALID EMAIL" or error == "INVALID PASSWORD":
+            if error == "INVALID EMAIL":
                 return Response(
-                    {"message": "Invalid credentials"},
+                    {
+                        "message": "No account found with this email address. Please check your email or sign up."
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+            elif error == "INVALID PASSWORD":
+                return Response(
+                    {"message": "Incorrect password. Please try again."},
                     status=status.HTTP_401_UNAUTHORIZED,
                 )
 
             tokens = get_token_for_user(user)
 
-           
             response = Response(
                 {"access": tokens.get("access")}, status=status.HTTP_200_OK
             )
@@ -102,7 +115,6 @@ class TokenCookieView(APIView):
             cookie_samesite = os.getenv("COOKIE_SAMESITE", "Lax")
             cookie_domain = os.getenv("COOKIE_DOMAIN", None)
 
-          
             response.set_cookie(
                 key="refresh",
                 value=tokens.get("refresh"),
