@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: freelance-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn FreelanceAPI.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-vercel-app.vercel.app
+      - key: DATABASE_URL
+        fromDatabase:
+          name: freelance-db
+          property: connectionString
+
+databases:
+  - name: freelance-db
+    plan: free
