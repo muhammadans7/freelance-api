@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from jobs import job_service
 from drf_yasg.utils import swagger_auto_schema
+from proposals.models import Proposal
 
 
 class JobCreateView(APIView):
@@ -133,8 +134,18 @@ class JobDetailView(APIView):
         """Get job details - accessible by all authenticated users"""
         try:
             job = Job.objects.select_related("client").get(id=job_id)
-            response_data = JobResponseSerializer(job)
-            return Response(response_data.data, status=status.HTTP_200_OK)
+            response_data = JobResponseSerializer(job).data
+            
+            # Check if this job has any accepted proposals
+            has_accepted_proposal = Proposal.objects.filter(
+                job=job, 
+                status="accepted"
+            ).exists()
+            
+            # Add the accepted proposal status to the response
+            response_data['has_accepted_proposal'] = has_accepted_proposal
+            
+            return Response(response_data, status=status.HTTP_200_OK)
         except Job.DoesNotExist:
             return Response(
                 {"message": "Job not found"}, status=status.HTTP_404_NOT_FOUND
